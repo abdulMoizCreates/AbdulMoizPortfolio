@@ -1,0 +1,164 @@
+{
+  "meta": {
+    "version": 1,
+    "brand": "Portfolio 2026",
+    "note": "Single source of truth for portfolio content. null or empty means unknown: do not invent, do not render. Owner fills these in."
+  },
+
+  "identity": {
+    "firstName": "Abdul",
+    "lastName": "Moiz",
+    "fullName": "Abdul Moiz",
+    "location": { "city": "Karachi", "country": "Pakistan" },
+    "title": "AI Creative Designer",
+    "heroRoles": ["MERN Stack Developer", "Video Editor", "AI Creative Designer"],
+    "photo": {
+      "src": "/media/abdul-moiz.png",
+      "alt": "Portrait of Abdul Moiz",
+      "note": "Real white-background professional photo, background removed. Added at /media/abdul-moiz.png. One consistent photo everywhere."
+    }
+  },
+
+  "about": {
+    "short": "I make videos, designs and websites. I started with a camera at age 10 and have been building creative skills ever since.",
+    "long": "I started with videography at age 10 to 11 and taught myself everything after that, mostly through YouTube: video editing, graphic design, filmmaking, photography and 3D animation. I worked for more than two years as a self-employed video editor. Today I also build full websites as a MERN stack developer, and I bring a designer's eye to how they look and move.",
+    "roles": [
+      {
+        "id": "developer",
+        "label": "Developer",
+        "statement": "I am a Developer",
+        "description": "I build full websites with the MERN stack, from interface to database, and deploy them.",
+        "tools": ["HTML", "CSS", "JavaScript", "React", "Next.js", "Node.js", "Express", "MongoDB", "Tailwind CSS", "Supabase", "Git", "GitHub", "Vercel"]
+      },
+      {
+        "id": "designer",
+        "label": "Designer",
+        "statement": "I am a Designer",
+        "description": "I design graphics and interfaces, and I care about type, spacing and the small details.",
+        "tools": ["Photoshop", "Canva"]
+      },
+      {
+        "id": "video-editor",
+        "label": "Video Editor",
+        "statement": "I am a Video Editor",
+        "description": "More than two years as a self-employed video editor, working with motion graphics, 3D and filmmaking.",
+        "tools": ["Premiere Pro", "After Effects", "Blender"]
+      }
+    ]
+  },
+
+  "experience": [
+    {
+      "role": "Video Editor",
+      "type": "Self-employed",
+      "start": "2023",
+      "end": "2026",
+      "summary": "More than two years of Video Editing on casual events and personal projects.",
+      "clients": []
+    }
+  ],
+
+  "education": [
+    {
+      "institution": "Govt. College Formen Nazimabad",
+      "detail": "First year CS student",
+      "status": "current",
+      "program": null
+    },
+    {
+      "institution": "Saylani IT",
+      "detail": "Web development",
+      "status": "current"
+    }
+  ],
+
+  "skills": {
+    "development": ["HTML", "CSS", "JavaScript", "React", "Next.js", "Node.js", "Express", "MongoDB", "Tailwind CSS", "Supabase", "JWT authentication", "Git", "GitHub", "Docker", "Redis", "Vercel"],
+    "creativeTools": ["Premiere Pro", "After Effects", "Photoshop", "Blender", "Canva"],
+    "disciplines": ["Videography", "Video editing", "Graphic design", "Filmmaking", "Photography", "3D animation", "MS Office and computer productivity"],
+    "note": "No proficiency percentages. Developer tools Docker and Redis are listed in the marquee by the owner; confirm comfort level before featuring them."
+  },
+
+  "marquee": ["HTML", "CSS", "JS", "React", "Docker", "Redis", "Git", "GitHub", "Node", "Tailwind", "Supabase", "Vercel", "MongoDB", "Premiere Pro", "After Effects", "Photoshop", "Blender"],
+
+  "work": {
+    "showreel": { "src": null, "poster": null, "note": "Owner to provide." },
+    "websites": [
+      {
+        "id": "hcm-lite",
+        "title": "HCM Lite",
+        "description": "AI-assisted HR management system built at a Saylani coding-night hackathon. Admin, HR and Employee roles across 9 modules.",
+        "stack": ["Next.js", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
+        "repo": "https://github.com/abdulMoizCreates/Final-Hackathon",
+        "live": "https://hcm-lite.vercel.app/",
+        "image": "/media/project-thumbnails/hcm-lite.png",
+        "featured": null
+      },
+      {
+        "id": "feasto",
+        "title": "Feasto",
+        "description": "Food ordering website.",
+        "stack": [],
+        "repo": "https://github.com/abdulMoizCreates/Feasto",
+        "live": "https://feasto-murex.vercel.app/",
+        "image": "/media/project-thumbnails/feasto.png",
+        "featured": null
+      },
+      {
+        "id": "chat-app",
+        "title": "Real-time Chat App",
+        "description": "WhatsApp-style one-to-one chat with JWT authentication, online and offline status, typing indicator, message history and delivery and read receipts.",
+        "stack": ["Next.js", "Express", "Socket.IO", "MongoDB", "JWT"],
+        "repo": null,
+        "live": null,
+        "image": null,
+        "featured": null
+      }
+    ],
+    "videos": [],
+    "inProgress": [
+      {
+        "title": "Munshi AI",
+        "description": "SaaS web app that digitizes Pakistani local shopkeepers' manual registers: sales, inventory, stock and profit and loss.",
+        "status": "planned",
+        "showInWork": false
+      },
+      {
+        "title": "Feasto-RMS",
+        "description": "Subscription restaurant management SaaS for local restaurants. React, Express, MongoDB.",
+        "status": "planned",
+        "showInWork": false
+      }
+    ],
+    "note": "featured null means the owner has not decided. Videos list is empty until owner provides real videos. inProgress items are not for display unless owner sets showInWork to true."
+  },
+
+  "certifications": [],
+
+  "contact": {
+    "email": null,
+    "phone": null,
+    "availability": null,
+    "socials": [
+      { "platform": "GitHub", "handle": "abdulMoizCreates", "url": "https://github.com/abdulMoizCreates" },
+      { "platform": "LinkedIn", "handle": null, "url": null },
+      { "platform": "Instagram", "handle": null, "url": null },
+      { "platform": "YouTube", "handle": null, "url": null }
+    ],
+    "resume": { "src": null }
+  },
+
+  "seo": {
+    "title": "Abdul Moiz | AI Creative Designer",
+    "description": "Portfolio of Abdul Moiz: video editor, designer and MERN stack developer based in Karachi, Pakistan.",
+    "ogImage": null
+  },
+
+  "private": {
+    "display": false,
+    "note": "Context for the agent only. Never render.",
+    "age": 18,
+    "background": "Self-taught creative, mostly through YouTube. Aims to become a founder and entrepreneur and keep creativity as his profession, not to work as an employee.",
+    "tone": "Direct, honest, no exaggeration. Prefers real proof over claims."
+  }
+}
