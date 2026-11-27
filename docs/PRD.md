@@ -39,6 +39,7 @@ Fully static, content from `docs/about.json`. No backend. Supabase (contact form
 - Bottom-to-top masked text reveals on scroll, driven by transform and opacity only, with a calm reduced-motion fallback.
 - The footer is a proper closing surface with the real name, role, location, section navigation, available social links and a back-to-top action.
 - No horizontal overflow at supported widths
+- Every overlapping layer gets a background blur: header at rest and scrolled, frosted mobile menu, and a lighter blur on controls and links that sit over content
 - Interactive targets at least 44 pixels where practical, especially header controls, social links and the primary action
 - Lighthouse: Performance 90+, Accessibility 95+, SEO 95+ on mobile
 - Respect `prefers-reduced-motion`: content stays visible, the marquee becomes a static wrapped list, and no entrance animation is required to see the page

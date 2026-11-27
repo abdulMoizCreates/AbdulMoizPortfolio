@@ -56,26 +56,77 @@ function DeveloperArtifact({ role }: { role: Role }) {
 }
 
 function DesignerArtifact({ role }: { role: Role }) {
+  const words = role.description.split(/\s+/).filter(Boolean);
+
   return (
-    <div className="about-selection">
-      <p className="about-selection-type">
-        <span className="about-selection-target" data-selection-target>
-          <span aria-hidden="true" data-selection-fill className="about-selection-fill" />
-          <span className="about-selection-text">{role.description}</span>
-          <span aria-hidden="true" data-selection-frame className="about-selection-frame">
-            <span data-selection-handle className="about-selection-handle about-selection-handle--tl" />
-            <span data-selection-handle className="about-selection-handle about-selection-handle--tr" />
-            <span data-selection-handle className="about-selection-handle about-selection-handle--bl" />
-            <span data-selection-handle className="about-selection-handle about-selection-handle--br" />
-            <MousePointer2
-              aria-hidden="true"
-              data-selection-cursor
-              className="about-selection-cursor"
-              strokeWidth={1.5}
-            />
-          </span>
-        </span>
-      </p>
+    <div className="about-design">
+      <div className="about-design-workspace" data-design-workspace>
+        <div aria-hidden="true" className="about-design-rail">
+          {role.tools.map((tool) => (
+            <span key={tool} data-design-tool className="about-design-rail-item">
+              <ToolMark name={tool} />
+            </span>
+          ))}
+        </div>
+
+        <div className="about-design-canvas">
+          <div data-design-artboard className="about-design-artboard">
+            <div aria-hidden="true" className="about-design-artboard-bar">
+              <span>{role.label}</span>
+              <span>100%</span>
+            </div>
+
+            <div className="about-design-poster">
+              <p className="about-design-poster-kicker">{role.label}</p>
+              <p className="about-design-poster-copy">
+                <span className="about-design-selection" data-design-selection>
+                  {words.map((word, index) => (
+                    <span key={`${word}-${index}`} className="about-design-word-mask">
+                      <span data-design-word className="about-design-word">
+                        {word}
+                      </span>
+                    </span>
+                  ))}
+                  <span aria-hidden="true" data-design-frame className="about-design-frame">
+                    <span data-design-handle className="about-design-handle about-design-handle--tl" />
+                    <span data-design-handle className="about-design-handle about-design-handle--tr" />
+                    <span data-design-handle className="about-design-handle about-design-handle--bl" />
+                    <span data-design-handle className="about-design-handle about-design-handle--br" />
+                    <MousePointer2
+                      aria-hidden="true"
+                      data-design-cursor
+                      className="about-design-cursor"
+                      strokeWidth={1.4}
+                    />
+                  </span>
+                </span>
+              </p>
+              <div className="about-design-poster-tools">
+                {role.tools.map((tool) => (
+                  <span key={tool} className="about-design-chip">
+                    <ToolMark name={tool} />
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <span aria-hidden="true" data-design-sheen className="about-design-sheen" />
+          </div>
+        </div>
+
+        <aside aria-hidden="true" className="about-design-layers">
+          <p className="about-design-layers-title">Layers</p>
+          <ul>
+            {[role.label, ...role.tools].map((layer) => (
+              <li key={layer} data-design-layer className="about-design-layer">
+                <span className="about-design-layer-thumb" />
+                <span>{layer}</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      </div>
     </div>
   );
 }
@@ -87,24 +138,47 @@ type VideoArtifactProps = {
 };
 
 function VideoArtifact({ role, tapeEnabled, tapeVisible }: VideoArtifactProps) {
+  const ticks = Array.from({ length: 8 }, (_, index) =>
+    String(index).padStart(2, "0"),
+  );
+
   return (
     <div className="about-film">
-      {tapeEnabled ? (
-        <div data-film-canvas className="about-film-canvas">
-          {tapeVisible ? <FilmTape /> : null}
+      <div className="about-film-viewer">
+        {tapeEnabled ? (
+          <div data-film-canvas className="about-film-canvas">
+            {tapeVisible ? (
+              <FilmTape label={role.label} tools={role.tools} />
+            ) : null}
+          </div>
+        ) : null}
+        <div aria-hidden="true" className="about-film-hud">
+          <span>{role.label}</span>
+          <span className="about-film-hud-state">Preview</span>
         </div>
-      ) : null}
+      </div>
 
       <div aria-hidden="true" className="about-timeline">
+        <div className="about-timeline-ruler">
+          {ticks.map((tick) => (
+            <span key={tick}>{tick}</span>
+          ))}
+        </div>
         <div className="about-timeline-rows">
           {role.tools.map((tool, index) => (
             <div key={tool} className="about-timeline-row">
-              <span className="about-timeline-label">{tool}</span>
+              <span className="about-timeline-label">
+                <ToolMark name={tool} />
+                {tool}
+              </span>
               <div className="about-timeline-lane">
                 <span
                   data-timeline-clip
                   className={`about-timeline-clip about-timeline-clip--${(index % 3) + 1}`}
-                />
+                >
+                  <span className="about-timeline-clip-texture" />
+                  <span className="about-timeline-clip-label">{tool}</span>
+                </span>
               </div>
             </div>
           ))}
@@ -177,22 +251,27 @@ export function About() {
             "[data-terminal-tools] > li",
             stage,
           );
-          const selectionFill = stage.querySelector<HTMLElement>("[data-selection-fill]");
-          const selectionFrame = stage.querySelector<HTMLElement>("[data-selection-frame]");
-          const selectionHandles = gsap.utils.toArray<HTMLElement>(
-            "[data-selection-handle]",
+          const designArtboard = stage.querySelector<HTMLElement>("[data-design-artboard]");
+          const designTools = gsap.utils.toArray<HTMLElement>("[data-design-tool]", stage);
+          const designWords = gsap.utils.toArray<HTMLElement>("[data-design-word]", stage);
+          const designLayers = gsap.utils.toArray<HTMLElement>("[data-design-layer]", stage);
+          const designFrame = stage.querySelector<HTMLElement>("[data-design-frame]");
+          const designHandles = gsap.utils.toArray<HTMLElement>(
+            "[data-design-handle]",
             stage,
           );
-          const selectionCursor = stage.querySelector<HTMLElement>("[data-selection-cursor]");
+          const designCursor = stage.querySelector<HTMLElement>("[data-design-cursor]");
+          const designSheen = stage.querySelector<HTMLElement>("[data-design-sheen]");
           const timelineClips = gsap.utils.toArray<HTMLElement>("[data-timeline-clip]", stage);
           const playhead = stage.querySelector<HTMLElement>("[data-timeline-playhead]");
           const lane = stage.querySelector<HTMLElement>(".about-timeline-lane");
 
           if (
             scenes.length !== 3 ||
-            !selectionFill ||
-            !selectionFrame ||
-            !selectionCursor ||
+            !designArtboard ||
+            !designFrame ||
+            !designCursor ||
+            !designSheen ||
             !playhead ||
             !lane
           ) {
@@ -205,15 +284,25 @@ export function About() {
           gsap.set(scenes[0], { autoAlpha: 1, yPercent: 0 });
           gsap.set(terminalChars, { opacity: 0 });
           gsap.set(terminalTools, { autoAlpha: 0, y: 8 });
-          gsap.set(selectionFill, { scaleX: 0, transformOrigin: "left center" });
-          gsap.set(selectionFrame, {
-            scaleX: 0.18,
-            scaleY: 0.18,
+          gsap.set(designArtboard, {
+            autoAlpha: 0,
+            y: 34,
+            rotateX: 5,
+            rotateY: -9,
+            scale: 0.97,
+          });
+          gsap.set(designTools, { autoAlpha: 0, x: -10 });
+          gsap.set(designWords, { yPercent: 115, opacity: 0 });
+          gsap.set(designLayers, { autoAlpha: 0, x: 16 });
+          gsap.set(designFrame, {
+            scaleX: 0.22,
+            scaleY: 0.22,
             autoAlpha: 0,
             transformOrigin: "top left",
           });
-          gsap.set(selectionHandles, { autoAlpha: 0, scale: 0 });
-          gsap.set(selectionCursor, { autoAlpha: 0, x: 26, y: 26 });
+          gsap.set(designHandles, { autoAlpha: 0, scale: 0 });
+          gsap.set(designCursor, { autoAlpha: 0, x: 28, y: 28 });
+          gsap.set(designSheen, { autoAlpha: 0, xPercent: -110 });
           gsap.set(timelineClips, { scaleX: 0, transformOrigin: "left center" });
           gsap.set(playhead, { autoAlpha: 0, x: 0 });
 
@@ -221,7 +310,7 @@ export function About() {
             scrollTrigger: {
               trigger: stage,
               start: "top top+=88",
-              end: () => `+=${window.innerHeight * 2.4}`,
+              end: () => `+=${window.innerHeight * 2.8}`,
               pin: stage,
               pinSpacing: true,
               scrub: 0.55,
@@ -239,31 +328,75 @@ export function About() {
             )
             .to(scenes[0], { autoAlpha: 0, yPercent: -4, duration: 0.35 }, 0.9)
             .to(scenes[1], { autoAlpha: 1, yPercent: 0, duration: 0.35 }, 1.0)
-            .to(selectionFill, { scaleX: 1, duration: 0.35 }, 1.12)
             .to(
-              selectionFrame,
-              { scaleX: 1, scaleY: 1, autoAlpha: 1, duration: 0.35 },
+              designArtboard,
+              {
+                autoAlpha: 1,
+                y: 0,
+                rotateX: 0,
+                rotateY: 0,
+                scale: 1,
+                duration: 0.5,
+                ease: "power3.out",
+              },
+              1.04,
+            )
+            .to(
+              designTools,
+              { autoAlpha: 1, x: 0, duration: 0.28, stagger: 0.07 },
               1.12,
             )
             .to(
-              selectionHandles,
-              { autoAlpha: 1, scale: 1, duration: 0.2, stagger: 0.04 },
-              1.35,
+              designWords,
+              {
+                yPercent: 0,
+                opacity: 1,
+                duration: 0.32,
+                stagger: 0.045,
+                ease: "power2.out",
+              },
+              1.2,
             )
-            .to(selectionCursor, { autoAlpha: 1, x: 0, y: 0, duration: 0.35 }, 1.35)
-            .to(scenes[1], { autoAlpha: 0, yPercent: -4, duration: 0.35 }, 1.85)
-            .to(scenes[2], { autoAlpha: 1, yPercent: 0, duration: 0.35 }, 1.95)
+            .to(
+              designLayers,
+              { autoAlpha: 1, x: 0, duration: 0.3, stagger: 0.06 },
+              1.3,
+            )
+            .to(
+              designFrame,
+              { scaleX: 1, scaleY: 1, autoAlpha: 1, duration: 0.34 },
+              1.42,
+            )
+            .to(
+              designHandles,
+              { autoAlpha: 1, scale: 1, duration: 0.18, stagger: 0.04 },
+              1.58,
+            )
+            .to(
+              designCursor,
+              { autoAlpha: 1, x: 0, y: 0, duration: 0.34 },
+              1.6,
+            )
+            .fromTo(
+              designSheen,
+              { xPercent: -110, autoAlpha: 0 },
+              { xPercent: 110, autoAlpha: 1, duration: 0.38, ease: "power1.inOut" },
+              1.64,
+            )
+            .to(designSheen, { autoAlpha: 0, duration: 0.12 }, 2.02)
+            .to(scenes[1], { autoAlpha: 0, yPercent: -4, duration: 0.35 }, 1.9)
+            .to(scenes[2], { autoAlpha: 1, yPercent: 0, duration: 0.35 }, 2.0)
             .to(
               timelineClips,
               { scaleX: 1, duration: 0.3, stagger: 0.08 },
-              2.1,
+              2.12,
             )
-            .to(playhead, { autoAlpha: 1, duration: 0.01 }, 2.05)
+            .to(playhead, { autoAlpha: 1, duration: 0.01 }, 2.08)
             .fromTo(
               playhead,
               { x: 0 },
               { x: () => lane.offsetWidth, duration: 0.85, ease: "none" },
-              2.1,
+              2.12,
             );
 
           return () => {

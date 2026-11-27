@@ -13,10 +13,6 @@ export function Hero() {
   return (
     <section aria-labelledby="hero-title" data-hero>
       <HeroEntrance className="page-container hero-inner">
-        <div data-hero-masthead className="hero-location-pill">
-          {identity.location.city}, {identity.location.country}
-        </div>
-
         {photo ? (
           <figure data-hero-portrait className="hero-portrait">
             <div className="hero-portrait-media">

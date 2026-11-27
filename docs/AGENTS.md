@@ -46,7 +46,7 @@ Rules for any AI coding agent working on this repo. Read this first, every sessi
 | Certifications | done (hidden until real entries exist) |
 | Contact | done |
 | Footer | done |
-| Final polish, responsive and accessibility pass | in progress (`pnpm check` passes; 320/375/768/1440 and reduced-motion spot checks pending) |
+| Final polish, responsive and accessibility pass | in progress (`pnpm check` passes; 375/768/1440 verified in headless Chrome, including header glass and horizontal overflow; 320 and reduced-motion spot checks still pending) |
 | SEO and deploy | ready |
 
 ## Mistakes Log
@@ -74,6 +74,10 @@ Previous agent passes failed in these ways. Do not repeat them.
 - Animated `filter: blur()` in a text reveal despite the transform-and-opacity-only rule.
 - Put glass panes around every section. Glassmorphism here is selective: overlapping surfaces and hierarchy only, never a box around text-only content.
 - Made glass panes as generic rounded boxes with a visible 1px border. Realistic glass has no hard border: soft sheen, one top edge highlight, faint inner diffusion, broad shadow, and low opacity so the background blends through. Blurred ambient light layers belong behind overlapping content.
+- Wrote literal `backdrop-filter` values in `globals.css`. The Turbopack dev CSS pipeline rewrites them to `-webkit-backdrop-filter` only, which Chrome ignores, so the glass looked flat in dev while production was fine. Store the filter in a custom property (`--header-blur: blur(28px) saturate(150%)`) and apply `backdrop-filter: var(--header-blur)`; the variable form emits both prefixed and unprefixed in dev and production.
+- Let an ambient pseudo-element bleed sideways with `inset: 0 -8%`. That added exactly 8% to `document.scrollWidth` at every breakpoint. Keep ambient layers inside the section box, or clip the section, and measure `scrollWidth` against `clientWidth` after adding one.
+- Ran `pnpm build` while `next dev` was running. The dev server kept serving stale CSS after that. Restart `next dev` after any production build before judging visual changes.
+- Ignored a sub-pixel horizontal overflow from a decorative cursor at the viewport edge. `html { overflow-x: clip }` is the safe global guard; verify the page still scrolls vertically and pinned sections still pin.
 
 ## Permanent owner decisions (do not revert without asking)
 - The About **three-scene reel** is permanent: Developer terminal, Designer selection artifact, and Video Editor timeline with film tape. Do not replace it; improve it only with the owner's direction.

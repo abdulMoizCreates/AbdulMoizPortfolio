@@ -20,7 +20,6 @@ export function HeroEntrance({ children, className }: HeroEntranceProps) {
       const media = gsap.matchMedia();
 
       media.add("(prefers-reduced-motion: no-preference)", () => {
-        const masthead = scope.querySelector("[data-hero-masthead]");
         const name = scope.querySelector("[data-hero-name-text]");
         const portrait = scope.querySelector("[data-hero-portrait]");
         const columns = gsap.utils.toArray<HTMLElement>(
@@ -28,7 +27,6 @@ export function HeroEntrance({ children, className }: HeroEntranceProps) {
           scope,
         );
 
-        gsap.set(masthead, { autoAlpha: 0, y: 10 });
         gsap.set(name, { yPercent: 110, y: 0 });
         gsap.set(portrait, { autoAlpha: 0, y: 24, scale: 0.98 });
         gsap.set(columns, { autoAlpha: 0, y: 16 });
@@ -38,7 +36,6 @@ export function HeroEntrance({ children, className }: HeroEntranceProps) {
         });
 
         timeline
-          .to(masthead, { autoAlpha: 1, y: 0, duration: 0.8 }, 0.1)
           .to(name, { yPercent: 0, duration: 1.25 }, 0.15)
           .to(
             portrait,

@@ -91,7 +91,7 @@ export function SiteHeader({ brand, socials, location }: SiteHeaderProps) {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen(true)}
-            className="header-button md:hidden"
+            className="header-button header-menu-button"
           >
             <Menu aria-hidden="true" />
           </button>
