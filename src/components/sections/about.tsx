@@ -2,7 +2,13 @@
 
 import dynamic from "next/dynamic";
 import { MousePointer2 } from "lucide-react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 
 import { ToolMark } from "@/components/tool-mark";
 import { about, type Role } from "@/lib/about";
@@ -152,12 +158,21 @@ type VideoArtifactProps = {
   role: Role;
   tapeEnabled: boolean;
   tapeVisible: boolean;
+  motion: RefObject<{ value: number }>;
+  timecodeRef: RefObject<HTMLSpanElement | null>;
 };
 
-function VideoArtifact({ role, tapeEnabled, tapeVisible }: VideoArtifactProps) {
+function VideoArtifact({
+  role,
+  tapeEnabled,
+  tapeVisible,
+  motion,
+  timecodeRef,
+}: VideoArtifactProps) {
   const ticks = Array.from({ length: 8 }, (_, index) =>
     String(index).padStart(2, "0"),
   );
+  const stills = [...role.tools, ...role.tools.slice(0, 2)];
 
   return (
     <div className="about-film">
@@ -165,14 +180,14 @@ function VideoArtifact({ role, tapeEnabled, tapeVisible }: VideoArtifactProps) {
         {tapeEnabled ? (
           <div data-film-canvas className="about-film-canvas">
             {tapeVisible ? (
-              <FilmTape label={role.label} tools={role.tools} />
+              <FilmTape label={role.label} tools={role.tools} motion={motion} />
             ) : null}
           </div>
         ) : (
           <div aria-hidden="true" className="about-film-canvas about-film-canvas--static">
             <div className="about-film-strip">
-              {role.tools.map((tool) => (
-                <span key={tool} className="about-film-frame">
+              {stills.map((tool, index) => (
+                <span key={`${tool}-${index}`} className="about-film-frame">
                   {tool}
                 </span>
               ))}
@@ -181,14 +196,25 @@ function VideoArtifact({ role, tapeEnabled, tapeVisible }: VideoArtifactProps) {
         )}
         <div aria-hidden="true" className="about-film-hud">
           <span>{role.label}</span>
-          <span className="about-film-hud-state">Preview</span>
+          <span ref={timecodeRef} className="about-film-timecode">
+            00:00:00:00
+          </span>
         </div>
-        {tapeEnabled ? (
-          <span aria-hidden="true" data-film-progress className="about-film-progress" />
-        ) : null}
+        <div aria-hidden="true" className="about-film-transport">
+          <span>Preview</span>
+          <span className="about-film-transport-line">
+            {tapeEnabled ? (
+              <span data-film-progress className="about-film-progress" />
+            ) : null}
+          </span>
+        </div>
       </div>
 
       <div aria-hidden="true" className="about-timeline">
+        <div className="about-timeline-toolbar">
+          <span>Sequence</span>
+          <span>{role.label}</span>
+        </div>
         <div className="about-timeline-ruler">
           {ticks.map((tick) => (
             <span key={tick}>{tick}</span>
@@ -204,9 +230,21 @@ function VideoArtifact({ role, tapeEnabled, tapeVisible }: VideoArtifactProps) {
               <div className="about-timeline-lane">
                 <span
                   data-timeline-clip
-                  className={`about-timeline-clip about-timeline-clip--${(index % 3) + 1}`}
+                  className={`about-timeline-clip about-timeline-clip--${(index % 3) + 1}${
+                    index === 0 ? " about-timeline-clip--selected" : ""
+                  }`}
                 >
                   <span className="about-timeline-clip-texture" />
+                  <span className="about-timeline-clip-wave">
+                    {Array.from({ length: 16 }, (_, bar) => (
+                      <i
+                        key={bar}
+                        style={{
+                          height: `${18 + ((tool.charCodeAt(bar % tool.length) + bar * 7) % 62)}%`,
+                        }}
+                      />
+                    ))}
+                  </span>
                   <span className="about-timeline-clip-label">{tool}</span>
                 </span>
               </div>
@@ -221,6 +259,8 @@ function VideoArtifact({ role, tapeEnabled, tapeVisible }: VideoArtifactProps) {
 
 export function About() {
   const sectionRef = useRef<HTMLElement>(null);
+  const filmMotion = useRef({ value: 0 });
+  const timecodeRef = useRef<HTMLSpanElement>(null);
   const [tapeEnabled, setTapeEnabled] = useState(false);
   const [tapeVisible, setTapeVisible] = useState(false);
   const roles = about.about.roles;
@@ -441,9 +481,29 @@ export function About() {
             );
           }
 
+          timeline.to(
+            filmMotion.current,
+            {
+              value: 1,
+              duration: 0.85,
+              ease: "none",
+              onUpdate: () => {
+                const readout = timecodeRef.current;
+                if (!readout) return;
+                const frames = Math.round(filmMotion.current.value * 72);
+                readout.textContent = `00:00:${String(Math.floor(frames / 24)).padStart(2, "0")}:${String(frames % 24).padStart(2, "0")}`;
+              },
+            },
+            2.12,
+          );
+
           return () => {
             stage.removeAttribute("data-about-mode");
             timeline.kill();
+            filmMotion.current.value = 0;
+            if (timecodeRef.current) {
+              timecodeRef.current.textContent = "00:00:00:00";
+            }
           };
         },
       );
@@ -518,6 +578,8 @@ export function About() {
                     role={role}
                     tapeEnabled={tapeEnabled}
                     tapeVisible={tapeVisible}
+                    motion={filmMotion}
+                    timecodeRef={timecodeRef}
                   />
                 ) : null}
               </div>

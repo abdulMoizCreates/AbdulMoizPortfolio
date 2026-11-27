@@ -39,7 +39,7 @@ Rules for any AI coding agent working on this repo. Read this first, every sessi
 | Header, navigation, mobile menu | done (full name brand; About, Journey, Work, Skills, Contact order; real location and focus restore in mobile menu) |
 | Hero | done (symmetrical, premium and minimal: circular portrait, full name, bio, border-only neutral action, socials, masked role cycle; location removed from hero and carried by the footer) |
 | Tools marquee | done |
-| About (3 roles) | done (three-scene reel: developer terminal, cinematic design artboard with selection/palette/layers, and edit suite with 3D film tape and synced timeline — permanent, do not replace) |
+| About (3 roles) | done (three-scene reel: developer terminal, cinematic design artboard with selection/palette/layers, and recreated edit suite with a graded program monitor, twisted 3D film tape, live timecode and a waveform timeline — permanent, do not replace) |
 | Journey (experience + education) | done (mounted in page order, styled as two glass panels) |
 | My Work (websites + videos) | done (two supplied static screenshots wired in) |
 | Skills | done |
@@ -81,6 +81,8 @@ Previous agent passes failed in these ways. Do not repeat them.
 - Let the designer scene's art and copy auto-place into two grid rows because the art sits in earlier columns but comes later in the DOM. Set `grid-row: 1` explicitly on `.about-scene-copy` and `.about-scene-art` whenever the artifact is left of the copy.
 - Left the mobile and reduced-motion video scene without a viewer, so the HUD floated over the timeline. Render the static CSS film-strip fallback when the 3D tape is disabled, and gate the GSAP progress line on `tapeEnabled`.
 - Gated the entire pinned About setup on `[data-film-progress]`, which only mounts after `tapeEnabled` flips to true, so pinning never started. Treat late-mounted elements as optional in the guard, animate them conditionally, and keep the `useGSAP` dependency array constant in size.
+- Mutated `camera.position` from `useThree()` inside `useFrame`; the hooks lint rule rejects it. Mirror the camera into a ref in an effect and mutate `cameraRef.current` in the frame loop, the same pattern used for CanvasTexture offsets.
+- Left the video artifact as a thin dark ribbon with no visible frames. A monitor needs a graded still behind the film, brighter frame captions, and a low twist so the frames face the camera; otherwise it reads as raw even with post-processing.
 
 ## Permanent owner decisions (do not revert without asking)
 - The About **three-scene reel** is permanent: Developer terminal, Designer selection artifact, and Video Editor timeline with film tape. Do not replace it; improve it only with the owner's direction.

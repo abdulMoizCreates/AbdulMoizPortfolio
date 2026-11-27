@@ -1662,6 +1662,7 @@ body::before {
     );
   box-shadow:
     inset 0 1px 0 var(--glass-edge),
+    inset 0 -1px 0 var(--glass-shade),
     0 1.25rem 3rem var(--glass-shadow);
 }
 
@@ -1752,17 +1753,42 @@ body::before {
   );
 }
 
-.about-film-hud-state {
-  opacity: 0.7;
+.about-film-timecode {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  opacity: 0.78;
+}
+
+.about-film-transport {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.65rem 1rem;
+  color: var(--muted-foreground);
+  font-size: 0.65rem;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--background) 72%, transparent),
+    transparent
+  );
+}
+
+.about-film-transport-line {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: color-mix(in oklab, var(--foreground) 16%, transparent);
 }
 
 .about-film-progress {
   position: absolute;
-  right: 1rem;
-  bottom: 0.85rem;
-  left: 1rem;
-  z-index: 2;
-  height: 1px;
+  inset: 0;
   background: var(--foreground);
   box-shadow: 0 0 0.6rem color-mix(in oklab, var(--foreground) 50%, transparent);
   transform: scaleX(0);
@@ -1777,6 +1803,17 @@ body::before {
   gap: 0.4rem;
   padding-top: 0.75rem;
   border-top: 1px solid var(--border);
+}
+
+.about-timeline-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.15rem;
+  padding-bottom: 0.6rem;
+  color: var(--muted-foreground);
+  font-size: 0.65rem;
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--foreground) 9%, transparent);
 }
 
 .about-timeline-ruler {
@@ -1879,16 +1916,44 @@ body::before {
   );
 }
 
+.about-timeline-clip--selected {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--foreground) 52%, transparent),
+    inset 0 1px 0 var(--glass-edge),
+    0 0.35rem 0.9rem color-mix(in oklab, var(--background) 70%, transparent);
+}
+
 .about-timeline-clip-texture {
   position: absolute;
   inset: 0;
-  opacity: 0.55;
+  opacity: 0.45;
   background: repeating-linear-gradient(
     90deg,
     transparent 0 6px,
     color-mix(in oklab, var(--foreground) 22%, transparent) 6px 8px,
     transparent 8px 16px
   );
+}
+
+.about-timeline-clip-wave {
+  position: absolute;
+  right: 0.4rem;
+  bottom: 0.2rem;
+  left: 34%;
+  z-index: 1;
+  display: flex;
+  height: 52%;
+  align-items: flex-end;
+  gap: 2px;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.about-timeline-clip-wave i {
+  flex: 1;
+  min-width: 1px;
+  border-radius: 1px 1px 0 0;
+  background: var(--foreground);
 }
 
 .about-timeline-clip-label {
