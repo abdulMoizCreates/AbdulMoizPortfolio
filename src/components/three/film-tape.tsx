@@ -15,7 +15,7 @@ type FilmTapeProps = {
   tools: string[];
 };
 
-const FILM_WIDTH = 0.68;
+const FILM_WIDTH = 0.9;
 const SEGMENTS = 200;
 const FRAME_COUNT = 16;
 
@@ -178,8 +178,8 @@ function createFilmTexture({ label, tools }: FilmTapeProps) {
 
     context.textAlign = "center";
     context.textBaseline = "middle";
-    context.fillStyle = "rgb(232 235 242 / 62%)";
-    context.font = "500 22px Inter, Arial, sans-serif";
+    context.fillStyle = "rgb(232 235 242 / 78%)";
+    context.font = "500 24px Inter, Arial, sans-serif";
     const caption = captions[index % captions.length] ?? label;
     context.fillText(caption, x + frameWidth / 2, gateTop + frameHeight * 0.38, frameWidth - 10);
 
@@ -274,7 +274,7 @@ function FilmStrip({ label, tools }: FilmTapeProps) {
 export default function FilmTape({ label, tools }: FilmTapeProps) {
   return (
     <Canvas
-      camera={{ position: [0, 0, 9], fov: 36 }}
+      camera={{ position: [0, 0, 8.2], fov: 36 }}
       dpr={[1, 1.5]}
       gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
       style={{ width: "100%", height: "100%" }}

@@ -37,15 +37,15 @@ Rules for any AI coding agent working on this repo. Read this first, every sessi
 | Project setup | done |
 | Global layout, theme, fonts, smooth scroll | done |
 | Header, navigation, mobile menu | done (full name brand; About, Journey, Work, Skills, Contact order; real location and focus restore in mobile menu) |
-| Hero | done (rebuilt symmetrical, premium and minimal: location pill, circular portrait, full name, bio, border-only neutral action, socials, masked role cycle; no accent color) |
+| Hero | done (symmetrical, premium and minimal: circular portrait, full name, bio, border-only neutral action, socials, masked role cycle; location removed from hero and carried by the footer) |
 | Tools marquee | done |
-| About (3 roles) | done (three-scene reel: terminal, selection artifact, timeline and film tape — permanent, do not replace) |
+| About (3 roles) | done (three-scene reel: developer terminal, cinematic design artboard with selection/palette/layers, and edit suite with 3D film tape and synced timeline — permanent, do not replace) |
 | Journey (experience + education) | done (mounted in page order, styled as two glass panels) |
 | My Work (websites + videos) | done (two supplied static screenshots wired in) |
 | Skills | done |
 | Certifications | done (hidden until real entries exist) |
 | Contact | done |
-| Footer | done |
+| Footer | done (carries the real location removed from the hero) |
 | Final polish, responsive and accessibility pass | in progress (`pnpm check` passes; 375/768/1440 verified in headless Chrome, including header glass and horizontal overflow; 320 and reduced-motion spot checks still pending) |
 | SEO and deploy | ready |
 
@@ -78,6 +78,9 @@ Previous agent passes failed in these ways. Do not repeat them.
 - Let an ambient pseudo-element bleed sideways with `inset: 0 -8%`. That added exactly 8% to `document.scrollWidth` at every breakpoint. Keep ambient layers inside the section box, or clip the section, and measure `scrollWidth` against `clientWidth` after adding one.
 - Ran `pnpm build` while `next dev` was running. The dev server kept serving stale CSS after that. Restart `next dev` after any production build before judging visual changes.
 - Ignored a sub-pixel horizontal overflow from a decorative cursor at the viewport edge. `html { overflow-x: clip }` is the safe global guard; verify the page still scrolls vertically and pinned sections still pin.
+- Let the designer scene's art and copy auto-place into two grid rows because the art sits in earlier columns but comes later in the DOM. Set `grid-row: 1` explicitly on `.about-scene-copy` and `.about-scene-art` whenever the artifact is left of the copy.
+- Left the mobile and reduced-motion video scene without a viewer, so the HUD floated over the timeline. Render the static CSS film-strip fallback when the 3D tape is disabled, and gate the GSAP progress line on `tapeEnabled`.
+- Gated the entire pinned About setup on `[data-film-progress]`, which only mounts after `tapeEnabled` flips to true, so pinning never started. Treat late-mounted elements as optional in the guard, animate them conditionally, and keep the `useGSAP` dependency array constant in size.
 
 ## Permanent owner decisions (do not revert without asking)
 - The About **three-scene reel** is permanent: Developer terminal, Designer selection artifact, and Video Editor timeline with film tape. Do not replace it; improve it only with the owner's direction.

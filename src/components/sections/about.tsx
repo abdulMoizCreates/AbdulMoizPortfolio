@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { MousePointer2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 import { ToolMark } from "@/components/tool-mark";
 import { about, type Role } from "@/lib/about";
@@ -78,14 +78,20 @@ function DesignerArtifact({ role }: { role: Role }) {
 
             <div className="about-design-poster">
               <p className="about-design-poster-kicker">{role.label}</p>
-              <p className="about-design-poster-copy">
-                <span className="about-design-selection" data-design-selection>
+              <p className="about-design-poster-copy" aria-label={role.description}>
+                <span
+                  aria-hidden="true"
+                  className="about-design-selection"
+                  data-design-selection
+                >
                   {words.map((word, index) => (
-                    <span key={`${word}-${index}`} className="about-design-word-mask">
-                      <span data-design-word className="about-design-word">
-                        {word}
-                      </span>
-                    </span>
+                    <Fragment key={`${word}-${index}`}>
+                      <span className="about-design-word-mask">
+                        <span data-design-word className="about-design-word">
+                          {word}
+                        </span>
+                      </span>{" "}
+                    </Fragment>
                   ))}
                   <span aria-hidden="true" data-design-frame className="about-design-frame">
                     <span data-design-handle className="about-design-handle about-design-handle--tl" />
@@ -101,6 +107,17 @@ function DesignerArtifact({ role }: { role: Role }) {
                   </span>
                 </span>
               </p>
+              <div className="about-design-palette" aria-hidden="true">
+                <span>Palette</span>
+                <span className="about-design-swatches">
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </span>
+              </div>
+
               <div className="about-design-poster-tools">
                 {role.tools.map((tool) => (
                   <span key={tool} className="about-design-chip">
@@ -151,11 +168,24 @@ function VideoArtifact({ role, tapeEnabled, tapeVisible }: VideoArtifactProps) {
               <FilmTape label={role.label} tools={role.tools} />
             ) : null}
           </div>
-        ) : null}
+        ) : (
+          <div aria-hidden="true" className="about-film-canvas about-film-canvas--static">
+            <div className="about-film-strip">
+              {role.tools.map((tool) => (
+                <span key={tool} className="about-film-frame">
+                  {tool}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
         <div aria-hidden="true" className="about-film-hud">
           <span>{role.label}</span>
           <span className="about-film-hud-state">Preview</span>
         </div>
+        {tapeEnabled ? (
+          <span aria-hidden="true" data-film-progress className="about-film-progress" />
+        ) : null}
       </div>
 
       <div aria-hidden="true" className="about-timeline">
@@ -264,6 +294,7 @@ export function About() {
           const designSheen = stage.querySelector<HTMLElement>("[data-design-sheen]");
           const timelineClips = gsap.utils.toArray<HTMLElement>("[data-timeline-clip]", stage);
           const playhead = stage.querySelector<HTMLElement>("[data-timeline-playhead]");
+          const filmProgress = stage.querySelector<HTMLElement>("[data-film-progress]");
           const lane = stage.querySelector<HTMLElement>(".about-timeline-lane");
 
           if (
@@ -305,6 +336,9 @@ export function About() {
           gsap.set(designSheen, { autoAlpha: 0, xPercent: -110 });
           gsap.set(timelineClips, { scaleX: 0, transformOrigin: "left center" });
           gsap.set(playhead, { autoAlpha: 0, x: 0 });
+          if (filmProgress) {
+            gsap.set(filmProgress, { scaleX: 0, transformOrigin: "left center" });
+          }
 
           const timeline = gsap.timeline({
             scrollTrigger: {
@@ -399,6 +433,14 @@ export function About() {
               2.12,
             );
 
+          if (filmProgress) {
+            timeline.to(
+              filmProgress,
+              { scaleX: 1, duration: 0.85, ease: "none" },
+              2.12,
+            );
+          }
+
           return () => {
             stage.removeAttribute("data-about-mode");
             timeline.kill();
@@ -408,7 +450,11 @@ export function About() {
 
       return () => media.revert();
     },
-    { scope: sectionRef, dependencies: [roles.length] },
+    {
+      scope: sectionRef,
+      dependencies: [roles.length, tapeEnabled],
+      revertOnUpdate: true,
+    },
   );
 
   if (roles.length === 0) return null;
