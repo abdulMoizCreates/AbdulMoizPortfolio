@@ -10,7 +10,7 @@
     "lastName": "Moiz",
     "fullName": "Abdul Moiz",
     "location": { "city": "Karachi", "country": "Pakistan" },
-    "title": "AI Creative Designer",
+    "title": "Creative developer",
     "heroRoles": ["MERN Stack Developer", "Video Editor", "AI Creative Designer"],
     "photo": {
       "src": "/media/abdul-moiz.png",

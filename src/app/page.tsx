@@ -22,9 +22,9 @@ export default function Home() {
         <Hero />
         <ToolsMarquee items={about.marquee} />
         <About />
-        <Journey />
         <Work />
         <Skills />
+        <Journey />
         <Certifications />
         <Contact />
       </main>

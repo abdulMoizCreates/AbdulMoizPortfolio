@@ -1636,7 +1636,7 @@ body::before {
   display: flex;
   width: 100%;
   flex-direction: column;
-  gap: clamp(1rem, 2vw, 1.5rem);
+  gap: clamp(0.9rem, 1.6vw, 1.35rem);
 }
 
 .about-film-viewer {
@@ -1644,94 +1644,121 @@ body::before {
   width: 100%;
 }
 
-.about-film-canvas {
+.about-film-monitor {
   position: relative;
-  height: clamp(14rem, 26vh, 20rem);
+  aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: var(--radius);
-  background:
-    radial-gradient(
-      30rem 12rem at 50% 46%,
-      color-mix(in oklab, var(--foreground) 9%, transparent),
-      transparent 72%
-    ),
-    linear-gradient(
-      180deg,
-      color-mix(in oklab, var(--foreground) 7%, transparent),
-      color-mix(in oklab, var(--foreground) 2%, transparent)
-    );
+  border-radius: var(--radius-glass);
+  background: var(--card);
   box-shadow:
     inset 0 1px 0 var(--glass-edge),
     inset 0 -1px 0 var(--glass-shade),
-    0 1.25rem 3rem var(--glass-shadow);
+    0 2.5rem 5rem var(--glass-shadow),
+    0 0.6rem 1.6rem color-mix(in oklab, var(--background) 55%, transparent);
 }
 
-.about-film-canvas::after {
+.about-film-monitor::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 4;
   pointer-events: none;
-  box-shadow: inset 0 0 5rem color-mix(in oklab, var(--background) 82%, transparent);
-}
-
-.about-film-canvas--static {
-  display: grid;
-  height: clamp(11rem, 28vw, 15rem);
-  place-items: center;
-}
-
-.about-film-strip {
-  display: flex;
-  width: 100%;
-  gap: 0.4rem;
-  padding-inline: 0.75rem;
-  transform: rotate(-4deg);
-}
-
-.about-film-frame {
-  position: relative;
-  display: grid;
-  flex: 1;
-  min-width: 0;
-  min-height: 5.25rem;
-  overflow: hidden;
-  padding: 0.6rem 0.25rem;
-  place-items: center;
-  border-radius: 0.2rem;
   background: linear-gradient(
-    135deg,
-    color-mix(in oklab, var(--foreground) 16%, transparent),
-    color-mix(in oklab, var(--foreground) 6%, transparent)
+    116deg,
+    transparent 34%,
+    var(--glass-sheen) 48%,
+    transparent 63%
   );
-  box-shadow:
-    inset 0 1px 0 var(--glass-edge),
-    0 0.5rem 1.2rem var(--glass-shadow);
-  color: var(--muted-foreground);
-  font-size: clamp(0.55rem, 2vw, 0.7rem);
-  text-align: center;
+  opacity: 0.7;
 }
 
-.about-film-frame::before,
-.about-film-frame::after {
-  content: "";
+.about-film-still {
   position: absolute;
-  right: 0.35rem;
-  left: 0.35rem;
-  height: 0.28rem;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--background) 0 8px,
-    transparent 8px 14px
-  );
-  opacity: 0.8;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(180deg, #1b222c 0%, #3a4451 44%, #0d1117 100%);
+  will-change: transform;
 }
 
-.about-film-frame::before {
-  top: 0.25rem;
+.about-film-still-glow {
+  position: absolute;
+  top: 8%;
+  left: 62%;
+  width: 58%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgb(236 242 252 / 32%), transparent 68%);
+  filter: blur(20px);
 }
 
-.about-film-frame::after {
-  bottom: 0.25rem;
+.about-film-still-ridge {
+  position: absolute;
+  inset-inline: -4%;
+  display: block;
+}
+
+.about-film-still-ridge--far {
+  bottom: 12%;
+  height: 42%;
+  background: linear-gradient(180deg, rgb(24 30 39 / 76%), rgb(13 17 23 / 92%));
+  clip-path: polygon(0 76%, 16% 44%, 34% 66%, 55% 28%, 74% 62%, 88% 38%, 100% 64%, 100% 100%, 0 100%);
+}
+
+.about-film-still-ridge--near {
+  bottom: 0;
+  height: 46%;
+  background: linear-gradient(180deg, rgb(9 12 17 / 86%), #05070a);
+  clip-path: polygon(0 56%, 22% 74%, 44% 46%, 66% 70%, 86% 50%, 100% 70%, 100% 100%, 0 100%);
+}
+
+.about-film-still-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+.about-film-monitor-guides {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.about-film-monitor-guides span {
+  position: absolute;
+  background: color-mix(in oklab, var(--foreground) 13%, transparent);
+}
+
+.about-film-monitor-guides span:nth-child(1),
+.about-film-monitor-guides span:nth-child(2) {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+.about-film-monitor-guides span:nth-child(1) {
+  left: 33.33%;
+}
+
+.about-film-monitor-guides span:nth-child(2) {
+  left: 66.66%;
+}
+
+.about-film-monitor-guides span:nth-child(3),
+.about-film-monitor-guides span:nth-child(4) {
+  right: 0;
+  left: 0;
+  height: 1px;
+}
+
+.about-film-monitor-guides span:nth-child(3) {
+  top: 33.33%;
+}
+
+.about-film-monitor-guides span:nth-child(4) {
+  top: 66.66%;
 }
 
 .about-film-hud {
@@ -1742,78 +1769,206 @@ body::before {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.85rem 1rem;
+  padding: 0.75rem 0.9rem;
   color: var(--muted-foreground);
-  font-size: 0.7rem;
+  font-size: 0.66rem;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    color-mix(in oklab, var(--background) 62%, transparent),
+    color-mix(in oklab, var(--background) 58%, transparent),
     transparent
   );
+}
+
+.about-film-hud-label {
+  white-space: nowrap;
 }
 
 .about-film-timecode {
   color: var(--foreground);
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
-  opacity: 0.78;
+  opacity: 0.82;
+}
+
+.about-film-monitor-meta {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 0.7rem;
+  z-index: 2;
+  display: flex;
+  gap: 0.75rem;
+  color: color-mix(in oklab, var(--foreground) 62%, transparent);
+  font-size: 0.6rem;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.about-film-strip {
+  position: relative;
+  margin-top: 0.55rem;
+  overflow: hidden;
+  border-radius: 0.55rem;
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
+  box-shadow:
+    inset 0 1px 0 var(--glass-edge),
+    inset 0 -1px 0 var(--glass-shade);
+}
+
+.about-film-strip-track {
+  display: flex;
+  width: max-content;
+  gap: 0.35rem;
+  padding: 0.4rem;
+  will-change: transform;
+}
+
+.about-film-frame {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  width: clamp(4.5rem, 9vw, 6.5rem);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  place-items: end center;
+  border-radius: 0.22rem;
+  background: linear-gradient(135deg, #252d38, #0c1016);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 12%, transparent);
+}
+
+.about-film-frame::before,
+.about-film-frame::after {
+  content: "";
+  position: absolute;
+  right: 0.28rem;
+  left: 0.28rem;
+  height: 0.22rem;
+  background: repeating-linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--background) 88%, transparent) 0 6px,
+    transparent 6px 11px
+  );
+  opacity: 0.9;
+}
+
+.about-film-frame::before {
+  top: 0.3rem;
+}
+
+.about-film-frame::after {
+  bottom: 0.3rem;
+}
+
+.about-film-frame-image {
+  position: absolute;
+  inset: 14% 7%;
+  background:
+    radial-gradient(circle at 64% 26%, rgb(230 238 250 / 24%), transparent 60%),
+    linear-gradient(180deg, transparent 54%, rgb(6 9 13 / 82%) 55%);
+}
+
+.about-film-frame:nth-child(even) .about-film-frame-image {
+  background:
+    radial-gradient(circle at 28% 30%, rgb(230 238 250 / 18%), transparent 58%),
+    linear-gradient(180deg, transparent 48%, rgb(6 9 13 / 86%) 49%);
+}
+
+.about-film-frame:first-child {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--foreground) 42%, transparent),
+    0 0 0.9rem color-mix(in oklab, var(--foreground) 14%, transparent);
+}
+
+.about-film-frame-caption {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  max-width: 90%;
+  padding-bottom: 0.32rem;
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
+  font-size: 0.56rem;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .about-film-transport {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  z-index: 2;
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  padding: 0.65rem 1rem;
+  margin-top: 0.6rem;
   color: var(--muted-foreground);
-  font-size: 0.65rem;
-  pointer-events: none;
-  background: linear-gradient(
-    to top,
-    color-mix(in oklab, var(--background) 72%, transparent),
-    transparent
-  );
+  font-size: 0.62rem;
+}
+
+.about-film-transport-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted-foreground);
+}
+
+.about-film-transport-controls svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.about-film-transport-controls svg:nth-child(2) {
+  color: var(--foreground);
 }
 
 .about-film-transport-line {
   position: relative;
   flex: 1;
-  height: 1px;
-  background: color-mix(in oklab, var(--foreground) 16%, transparent);
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: color-mix(in oklab, var(--foreground) 14%, transparent);
 }
 
 .about-film-progress {
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   background: var(--foreground);
-  box-shadow: 0 0 0.6rem color-mix(in oklab, var(--foreground) 50%, transparent);
+  box-shadow: 0 0 0.6rem color-mix(in oklab, var(--foreground) 40%, transparent);
   transform: scaleX(0);
   transform-origin: left center;
 }
 
+.about-film-transport-label {
+  white-space: nowrap;
+}
+
 .about-timeline {
-  --timeline-label: 5.5rem;
-  --timeline-gap: 0.75rem;
+  --timeline-label: 6rem;
+  --timeline-gap: 0.85rem;
   position: relative;
   display: grid;
-  gap: 0.4rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--border);
+  gap: 0.45rem;
+  padding: 0.85rem 0.9rem 0.95rem;
+  border-radius: var(--radius-glass);
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--foreground) 5%, transparent), transparent 42%),
+    var(--card);
+  box-shadow:
+    inset 0 1px 0 var(--glass-edge),
+    inset 0 -1px 0 var(--glass-shade),
+    0 1.5rem 3rem var(--glass-shadow);
 }
 
 .about-timeline-toolbar {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 0.15rem;
-  padding-bottom: 0.6rem;
+  padding-bottom: 0.55rem;
   color: var(--muted-foreground);
-  font-size: 0.65rem;
-  box-shadow: 0 1px 0 color-mix(in oklab, var(--foreground) 9%, transparent);
+  font-size: 0.64rem;
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+
+.about-timeline-toolbar-meta {
+  font-variant-numeric: tabular-nums;
 }
 
 .about-timeline-ruler {
@@ -1821,13 +1976,14 @@ body::before {
   grid-template-columns: repeat(8, minmax(0, 1fr));
   padding-left: calc(var(--timeline-label) + var(--timeline-gap));
   color: var(--muted-foreground);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
+  font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 
 .about-timeline-ruler span {
   position: relative;
-  padding-top: 0.45rem;
+  padding-top: 0.4rem;
 }
 
 .about-timeline-ruler span::before {
@@ -1836,8 +1992,23 @@ body::before {
   top: 0;
   left: 0;
   width: 1px;
-  height: 0.3rem;
-  background: color-mix(in oklab, var(--foreground) 35%, transparent);
+  height: 0.28rem;
+  background: color-mix(in oklab, var(--foreground) 34%, transparent);
+}
+
+.about-timeline-ruler span::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12.5%;
+  width: 1px;
+  height: 0.18rem;
+  background: color-mix(in oklab, var(--foreground) 16%, transparent);
+}
+
+.about-timeline-rows {
+  display: grid;
+  gap: 0.35rem;
 }
 
 .about-timeline-row {
@@ -1853,41 +2024,42 @@ body::before {
   align-items: center;
   gap: 0.4rem;
   color: var(--muted-foreground);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   line-height: 1.3;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .about-timeline-label .tool-mark {
-  width: 0.8rem;
-  height: 0.8rem;
-  opacity: 0.75;
+  width: 0.85rem;
+  height: 0.85rem;
+  flex: 0 0 auto;
+  opacity: 0.8;
 }
 
 .about-timeline-lane {
   position: relative;
-  height: 1.5rem;
+  height: 1.7rem;
   overflow: hidden;
-  border-radius: 0.22rem;
-  background: color-mix(in oklab, var(--foreground) 5%, transparent);
-  box-shadow: inset 0 1px 2px color-mix(in oklab, var(--foreground) 10%, transparent);
+  border-radius: 0.32rem;
+  background: color-mix(in oklab, var(--foreground) 4%, transparent);
+  box-shadow: inset 0 1px 2px color-mix(in oklab, var(--foreground) 9%, transparent);
 }
 
 .about-timeline-clip {
   position: absolute;
-  top: 0.1rem;
-  bottom: 0.1rem;
+  top: 0.14rem;
+  bottom: 0.14rem;
   overflow: hidden;
-  border-radius: 0.2rem;
+  border-radius: 0.28rem;
   background: linear-gradient(
     180deg,
-    color-mix(in oklab, var(--foreground) 26%, transparent),
-    color-mix(in oklab, var(--foreground) 14%, transparent)
+    color-mix(in oklab, var(--foreground) 24%, transparent),
+    color-mix(in oklab, var(--foreground) 12%, transparent)
   );
   box-shadow:
     inset 0 1px 0 var(--glass-edge),
-    0 0.3rem 0.8rem color-mix(in oklab, var(--background) 70%, transparent);
+    0 0.35rem 0.8rem color-mix(in oklab, var(--background) 65%, transparent);
   transform-origin: left center;
 }
 
@@ -1901,8 +2073,8 @@ body::before {
   width: 62%;
   background: linear-gradient(
     180deg,
-    color-mix(in oklab, var(--foreground) 20%, transparent),
-    color-mix(in oklab, var(--foreground) 11%, transparent)
+    color-mix(in oklab, var(--foreground) 19%, transparent),
+    color-mix(in oklab, var(--foreground) 10%, transparent)
   );
 }
 
@@ -1911,41 +2083,65 @@ body::before {
   width: 36%;
   background: linear-gradient(
     180deg,
-    color-mix(in oklab, var(--foreground) 30%, transparent),
-    color-mix(in oklab, var(--foreground) 16%, transparent)
+    color-mix(in oklab, var(--foreground) 28%, transparent),
+    color-mix(in oklab, var(--foreground) 14%, transparent)
   );
 }
 
 .about-timeline-clip--selected {
   box-shadow:
-    inset 0 0 0 1px color-mix(in oklab, var(--foreground) 52%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--foreground) 55%, transparent),
     inset 0 1px 0 var(--glass-edge),
-    0 0.35rem 0.9rem color-mix(in oklab, var(--background) 70%, transparent);
+    0 0.35rem 0.9rem color-mix(in oklab, var(--background) 65%, transparent);
 }
 
-.about-timeline-clip-texture {
+.about-timeline-clip-head {
   position: absolute;
-  inset: 0;
-  opacity: 0.45;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0 6px,
-    color-mix(in oklab, var(--foreground) 22%, transparent) 6px 8px,
-    transparent 8px 16px
+  inset-inline: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  padding: 0.16rem 0.45rem;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--background) 40%, transparent),
+    transparent
   );
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+
+.about-timeline-clip-head::before {
+  content: "";
+  width: 0.85rem;
+  height: 0.6rem;
+  flex: 0 0 auto;
+  border-radius: 0.12rem;
+  background:
+    radial-gradient(circle at 65% 25%, rgb(230 238 250 / 22%), transparent 62%),
+    linear-gradient(180deg, #39424f 0%, #0b0f14 100%);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--foreground) 14%, transparent);
+}
+
+.about-timeline-clip-head span {
+  overflow: hidden;
+  padding-left: 0.35rem;
+  color: var(--foreground);
+  font-size: 0.6rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .about-timeline-clip-wave {
   position: absolute;
-  right: 0.4rem;
-  bottom: 0.2rem;
-  left: 34%;
+  right: 0.45rem;
+  bottom: 0.18rem;
+  left: 38%;
   z-index: 1;
   display: flex;
-  height: 52%;
+  height: 44%;
   align-items: flex-end;
   gap: 2px;
-  opacity: 0.45;
+  opacity: 0.5;
   pointer-events: none;
 }
 
@@ -1956,16 +2152,13 @@ body::before {
   background: var(--foreground);
 }
 
-.about-timeline-clip-label {
-  position: relative;
-  z-index: 1;
-  display: block;
-  overflow: hidden;
-  padding: 0.15rem 0.5rem;
-  color: var(--foreground);
-  font-size: 0.68rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.about-timeline-clip-cut {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: color-mix(in oklab, var(--foreground) 40%, transparent);
 }
 
 .about-timeline-playhead {
@@ -2068,10 +2261,6 @@ body::before {
   .about-timeline {
     --timeline-label: 4.5rem;
     --timeline-gap: 0.6rem;
-  }
-
-  .about-film-canvas {
-    height: 15rem;
   }
 }
 

@@ -36,13 +36,13 @@ Rules for any AI coding agent working on this repo. Read this first, every sessi
 |---|---|
 | Project setup | done |
 | Global layout, theme, fonts, smooth scroll | done |
-| Header, navigation, mobile menu | done (full name brand; About, Journey, Work, Skills, Contact order; real location and focus restore in mobile menu) |
+| Header, navigation, mobile menu | done (full name brand; About, Work, Skills, Journey, Contact order shared by header and footer; real location and focus restore in mobile menu) |
 | Hero | done (symmetrical, premium and minimal: circular portrait, full name, bio, border-only neutral action, socials, masked role cycle; location removed from hero and carried by the footer) |
 | Tools marquee | done |
-| About (3 roles) | done (three-scene reel: developer terminal, cinematic design artboard with selection/palette/layers, and recreated edit suite with a graded program monitor, twisted 3D film tape, live timecode and a waveform timeline — permanent, do not replace) |
-| Journey (experience + education) | done (mounted in page order, styled as two glass panels) |
-| My Work (websites + videos) | done (two supplied static screenshots wired in) |
+| About (3 roles) | done (three-scene reel: developer terminal, cinematic design artboard with selection/palette/layers, and a recreated CSS edit suite with a graded program monitor, sprocketed filmstrip, live timecode and a layered waveform timeline — permanent, do not replace) |
+| My Work (websites + videos) | done (two supplied static screenshots wired in; placed directly after About) |
 | Skills | done |
+| Journey (experience + education) | done (styled as two glass panels; moved after Skills as the owner's lowest-priority section) |
 | Certifications | done (hidden until real entries exist) |
 | Contact | done |
 | Footer | done (carries the real location removed from the hero) |
@@ -66,7 +66,7 @@ Previous agent passes failed in these ways. Do not repeat them.
 - Left dark monochrome brand marks invisible on graphite. Give GitHub, Next.js, Express, Vercel and Socket.IO a theme-aware contrast treatment.
 - Typed a `pointermove` listener as `(event: PointerEvent)` on an element returned by `closest()`; TypeScript rejects it because `ElementEventMap` has no `pointermove`. Type the handler as `(event: Event)` and cast to `PointerEvent` inside.
 - Marked a section done while its component was neither mounted in `page.tsx` nor styled in `globals.css` (Journey). Verify the rendered page and the CSS for every tracker row.
-- Used `meta.brand` ('Portfolio 2026') as the header brand instead of `identity.fullName`, and let navigation order drift from About, Journey, Work, Skills, Contact.
+- Used `meta.brand` ('Portfolio 2026') as the header brand instead of `identity.fullName`, and let navigation order drift from About, Work, Skills, Journey, Contact.
 - Reintroduced a decorative accent color against the owner's no-accent direction. The palette is strictly neutral; focus, selection and primary actions use neutral tokens.
 - Wrote an invalid CSS selector by placing `@media` inside a comma-separated selector list. Keep reduced-motion and no-JS fallbacks in separate blocks.
 - Left supplied screenshots unused in `docs/Images`; content must flow through `about.json` and `public/media`.
@@ -82,13 +82,14 @@ Previous agent passes failed in these ways. Do not repeat them.
 - Left the mobile and reduced-motion video scene without a viewer, so the HUD floated over the timeline. Render the static CSS film-strip fallback when the 3D tape is disabled, and gate the GSAP progress line on `tapeEnabled`.
 - Gated the entire pinned About setup on `[data-film-progress]`, which only mounts after `tapeEnabled` flips to true, so pinning never started. Treat late-mounted elements as optional in the guard, animate them conditionally, and keep the `useGSAP` dependency array constant in size.
 - Mutated `camera.position` from `useThree()` inside `useFrame`; the hooks lint rule rejects it. Mirror the camera into a ref in an effect and mutate `cameraRef.current` in the frame loop, the same pattern used for CanvasTexture offsets.
-- Left the video artifact as a thin dark ribbon with no visible frames. A monitor needs a graded still behind the film, brighter frame captions, and a low twist so the frames face the camera; otherwise it reads as raw even with post-processing.
+- Left the video artifact as a thin dark ribbon with no visible frames. A monitor needs a graded still behind the film, brighter frame captions, and a low twist so the frames face the camera; otherwise it reads as raw even with post-processing. Resolved by replacing the 3D ribbon with a CSS program monitor, sprocketed filmstrip and layered timeline.
 
 ## Permanent owner decisions (do not revert without asking)
-- The About **three-scene reel** is permanent: Developer terminal, Designer selection artifact, and Video Editor timeline with film tape. Do not replace it; improve it only with the owner's direction.
+- The About **three-scene reel** is permanent: Developer terminal, Designer selection artifact, and Video Editor edit suite with a program monitor, sprocketed filmstrip and timeline. Do not replace it; improve it only with the owner's direction. The owner asked to recreate the Video Editor visuals from scratch, so the old 3D film-tape component was removed in favor of a refined CSS-built suite.
 - The palette is strictly neutral. There is no accent color anywhere.
 - The hero stays symmetrical, premium and minimal on one centered axis. Iterate on it, but keep that character.
-- The header brand is the full name; navigation order is About, Journey, Work, Skills, Contact.
+- The header brand is the full name; navigation order is About, Work, Skills, Journey, Contact, shared with the footer through `src/lib/navigation.ts`.
+- Work sits directly after About because proof of work is the strongest signal. Journey (experience and education) is the owner's lowest-priority section and sits after Skills; recruiters and other visitors may ignore it. Do not move Journey back above Work.
 - Project screenshots are currently static files. The owner wants a refresh path so they track later UI changes to the live projects.
 - The site is now a glassmorphism upgrade: soft rounded glass on selected surfaces only, a cool-blue ambient background light that drifts slowly behind overlapping content, bottom-to-top scroll text reveals, and a proper footer. Keep it minimal and never make the panes dominate.
 - The fixed header overlaps page content by design. Blur whatever sits under it (stronger when scrolled) and keep anchor targets clear of it; the mobile menu is a frosted sheet too.

@@ -18,16 +18,16 @@ Fully static, content from `docs/about.json`. No backend. Supabase (contact form
 1. **Hero.** A symmetrical, premium and minimal composition on one centered axis: a location pill above a circular portrait, the full unbroken name, a short bio, a border-only primary action with the available social links, then the role line with its masked cycle. The name reveals as a unit and may move subtly with desktop scrolling; the portrait stays still after its entrance. The palette is neutral: no accent color anywhere. The 3D ring was removed by the owner.
 2. **Tools marquee.** Right-to-left typographic marquee of tool names between the hero and About. Use the authentic local brand marks that now exist in `public/media/tool-icons/` and keep every tool name visible. Pause control and a static wrapped fallback for reduced motion.
 3. **About.** Three role panels from `about.roles` (Developer, Designer, Video Editor), each with its statement, description and real tools. The existing letter reveal and tool entrance remain. Do not fabricate UI backgrounds or add unsupported role claims.
-4. **Journey.** Real experience and education from `about.experience` and `about.education`, presented as two glass panels. Hide the section when both arrays are empty. Never invent dates, clients, programs or institutions.
-5. **My Work.** Websites presented in an editorial two-column gallery with rounded rectangular preview areas. Use supplied screenshots only when available and clearly mark empty previews. Include authentic tool marks beside stack names. Videos appear with their real media in a simple responsive player. Showreel at the top when available. Source links use an accessible open-in-new-tab icon. If the project count is odd, leave the final cell empty rather than inventing a filler project.
-6. **Skills.** Grouped as a development index, creative tools and disciplines. No percentage bars or raw graphs.
+4. **My Work.** Websites presented in an editorial two-column gallery with rounded rectangular preview areas. Use supplied screenshots only when available and clearly mark empty previews. Include authentic tool marks beside stack names. Videos appear with their real media in a simple responsive player. Showreel at the top when available. Source links use an accessible open-in-new-tab icon. If the project count is odd, leave the final cell empty rather than inventing a filler project. This section sits immediately after About because proof of work is the strongest signal for the audience.
+5. **Skills.** Grouped as a development index, creative tools and disciplines. No percentage bars or raw graphs.
+6. **Journey.** Real experience and education from `about.experience` and `about.education`, presented as two glass panels. Hide the section when both arrays are empty. Never invent dates, clients, programs or institutions. This is the owner's lowest-priority section and is placed after Skills; recruiters and other visitors may skip it.
 7. **Certifications.** Rendered only from real entries in `about.json`. Hidden if the list is empty.
 8. **Contact.** Real contact links from `about.json` only. The contact form is Phase 2. When email, phone or availability is null, do not display a placeholder that implies a working channel.
 9. **Footer.** Real name, role, location and available social links.
 
 ## Header and navigation
 - Floating glass command bar with the full name as the brand.
-- Navigation follows page order: About, Journey, Work, Skills, Contact.
+- Navigation follows page order: About, Work, Skills, Journey, Contact.
 - Mobile menu is a full-screen frosted sheet with the same navigation, real location and available social links.
 - Keyboard focus moves into the menu on open; Escape closes it and restores focus to the menu button.
 
@@ -56,8 +56,9 @@ Blog, CMS, auth, backend, analytics dashboards.
 - Theme: light and dark, dark by default, preference persisted in the browser
 - Visual direction: restrained cinematic glassmorphism, neutral graphite and paper surfaces, authentic tool marks and real content
 - Header brand: full name
-- Navigation order: About, Journey, Work, Skills, Contact
-- About three-scene reel (Developer terminal, Designer selection artifact, Video Editor timeline and film tape) is a permanent owner-requested feature. Keep it; improve it only with the owner's direction.
+- Navigation order: About, Work, Skills, Journey, Contact
+- Work directly follows About; Journey (experience and education) is the owner's lowest-priority section and sits after Skills
+- About three-scene reel (Developer terminal, Designer selection artifact, Video Editor program monitor with a sprocketed filmstrip and layered timeline) is a permanent owner-requested feature. Keep it; improve it only with the owner's direction. The Video Editor visuals were rebuilt from scratch as CSS surfaces at the owner's request; the earlier 3D film-tape scene is retired.
 - Primary action: border-only at rest, a subtle neutral glass background on hover and focus
 
 ## Open items (owner to decide, agent must not guess)

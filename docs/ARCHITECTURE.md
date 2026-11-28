@@ -5,7 +5,7 @@
 - Tailwind CSS
 - shadcn/ui (base, restyled) and custom components
 - GSAP (core, ScrollTrigger) and Lenis for smooth scroll
-- Three.js via `@react-three/fiber` and `@react-three/drei` is installed but not currently rendered; the About film-tape scene is not part of the current static pass. The hero 3D ring was removed by the owner.
+- Three.js packages remain installed but nothing renders them; the owner asked to retire the raw 3D film tape, and the Video Editor scene is now a CSS-built program monitor, filmstrip and timeline. The hero 3D ring was removed by the owner earlier.
 - Lucide for interface actions and generic disciplines; authentic local brand marks in `public/media/tool-icons/` for named tools. Social links use Lucide symbols with accessible platform names.
 - pnpm as package manager
 - Deploy: Vercel
@@ -37,8 +37,8 @@ src/
     page.tsx          composes the header and sections in order
     globals.css       tokens, glass system, section styles, responsive rules
   components/
-    sections/         SiteHeader, Hero, ToolsMarquee, About, Journey, Work,
-                      Skills, Certifications, Contact, Footer
+    sections/         SiteHeader, Hero, ToolsMarquee, About, Work, Skills,
+                      Journey, Certifications, Contact, Footer
     ui/               shadcn components (restyled)
     motion/           hero entrance, scroll reveal, mask reveal, image reveal,
                       hover effects, scroll progress, smooth scroll, count up,
@@ -68,7 +68,7 @@ docs/                 these files
 - `html` uses `overflow-x: clip` as a guard against sub-pixel horizontal overflow. Keep ambient pseudo-elements inside their section boxes; a negative horizontal inset on `.site-footer::before` previously added 8% to the document width.
 - Typeface: Bricolage Grotesque through `next/font` for main headings (`--font-heading`); Inter for body, descriptions and UI (`--font-sans`). Fonts load through `next/font`.
 - Theme: light tokens on `:root`, dark tokens under `.dark`. A blocking script in `layout.tsx` restores the persisted theme before paint; `theme-toggle.tsx` toggles the class and `color-scheme`. Dark is the default.
-- Header navigation order is About, Journey, Work, Skills, Contact. The mobile menu uses a native dialog, locks document scroll, focuses the first navigation link on open and restores focus on close.
+- Header navigation order is About, Work, Skills, Journey, Contact, matching page order. The shared `src/lib/navigation.ts` drives both header and footer. Work follows About directly; Journey is the lowest-priority section and sits after Skills. The mobile menu uses a native dialog, locks document scroll, focuses the first navigation link on open and restores focus on close.
 - Monochrome brand marks get a `data-brand` attribute; dark mode inverts only the marks that need it for contrast.
 - Use the shared hero surface and portrait-plate gradient tokens rather than one-off gradients.
 - `prefers-reduced-motion` must keep all content visible, stop the marquee and render the tools as a static wrapped list.

@@ -1,23 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { MousePointer2 } from "lucide-react";
-import {
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-  type RefObject,
-} from "react";
+import { MousePointer2, Play, SkipBack, SkipForward } from "lucide-react";
+import { Fragment, useRef, type RefObject } from "react";
 
 import { ToolMark } from "@/components/tool-mark";
 import { about, type Role } from "@/lib/about";
 import { gsap, useGSAP } from "@/lib/gsap";
-
-const FilmTape = dynamic(() => import("@/components/three/film-tape"), {
-  ssr: false,
-  loading: () => null,
-});
 
 function DeveloperArtifact({ role }: { role: Role }) {
   const typed = role.label.toLowerCase();
@@ -156,64 +144,72 @@ function DesignerArtifact({ role }: { role: Role }) {
 
 type VideoArtifactProps = {
   role: Role;
-  tapeEnabled: boolean;
-  tapeVisible: boolean;
   motion: RefObject<{ value: number }>;
   timecodeRef: RefObject<HTMLSpanElement | null>;
 };
 
-function VideoArtifact({
-  role,
-  tapeEnabled,
-  tapeVisible,
-  motion,
-  timecodeRef,
-}: VideoArtifactProps) {
+function VideoArtifact({ role, timecodeRef }: VideoArtifactProps) {
   const ticks = Array.from({ length: 8 }, (_, index) =>
     String(index).padStart(2, "0"),
   );
-  const stills = [...role.tools, ...role.tools.slice(0, 2)];
+  const stills = [role.label, ...role.tools, role.label];
 
   return (
     <div className="about-film">
       <div className="about-film-viewer">
-        {tapeEnabled ? (
-          <div data-film-canvas className="about-film-canvas">
-            {tapeVisible ? (
-              <FilmTape label={role.label} tools={role.tools} motion={motion} />
-            ) : null}
+        <div className="about-film-monitor">
+          <div aria-hidden="true" className="about-film-still" data-film-still>
+            <span className="about-film-still-glow" />
+            <span className="about-film-still-ridge about-film-still-ridge--far" />
+            <span className="about-film-still-ridge about-film-still-ridge--near" />
+            <span className="about-film-still-grain" />
           </div>
-        ) : (
-          <div aria-hidden="true" className="about-film-canvas about-film-canvas--static">
-            <div className="about-film-strip">
-              {stills.map((tool, index) => (
-                <span key={`${tool}-${index}`} className="about-film-frame">
-                  {tool}
-                </span>
-              ))}
-            </div>
+          <div aria-hidden="true" className="about-film-monitor-guides">
+            <span />
+            <span />
+            <span />
+            <span />
           </div>
-        )}
-        <div aria-hidden="true" className="about-film-hud">
-          <span>{role.label}</span>
-          <span ref={timecodeRef} className="about-film-timecode">
-            00:00:00:00
-          </span>
+          <div className="about-film-hud">
+            <span className="about-film-hud-label">Program / {role.label}</span>
+            <span ref={timecodeRef} className="about-film-timecode">
+              00:00:00:00
+            </span>
+          </div>
+          <div aria-hidden="true" className="about-film-monitor-meta">
+            <span>1920 x 1080</span>
+            <span>24 fps</span>
+          </div>
         </div>
+
+        <div aria-hidden="true" className="about-film-strip">
+          <div data-film-strip className="about-film-strip-track">
+            {stills.map((tool, index) => (
+              <span key={`${tool}-${index}`} className="about-film-frame">
+                <span className="about-film-frame-image" />
+                <span className="about-film-frame-caption">{tool}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
         <div aria-hidden="true" className="about-film-transport">
-          <span>Preview</span>
-          <span className="about-film-transport-line">
-            {tapeEnabled ? (
-              <span data-film-progress className="about-film-progress" />
-            ) : null}
+          <span className="about-film-transport-controls">
+            <SkipBack />
+            <Play />
+            <SkipForward />
           </span>
+          <span className="about-film-transport-line">
+            <span data-film-progress className="about-film-progress" />
+          </span>
+          <span className="about-film-transport-label">Preview</span>
         </div>
       </div>
 
       <div aria-hidden="true" className="about-timeline">
         <div className="about-timeline-toolbar">
           <span>Sequence</span>
-          <span>{role.label}</span>
+          <span className="about-timeline-toolbar-meta">24 fps / stereo</span>
         </div>
         <div className="about-timeline-ruler">
           {ticks.map((tick) => (
@@ -234,18 +230,20 @@ function VideoArtifact({
                     index === 0 ? " about-timeline-clip--selected" : ""
                   }`}
                 >
-                  <span className="about-timeline-clip-texture" />
+                  <span className="about-timeline-clip-head">
+                    <span>{tool}</span>
+                  </span>
                   <span className="about-timeline-clip-wave">
-                    {Array.from({ length: 16 }, (_, bar) => (
+                    {Array.from({ length: 26 }, (_, bar) => (
                       <i
                         key={bar}
                         style={{
-                          height: `${18 + ((tool.charCodeAt(bar % tool.length) + bar * 7) % 62)}%`,
+                          height: `${16 + ((tool.charCodeAt(bar % tool.length) + bar * 11) % 68)}%`,
                         }}
                       />
                     ))}
                   </span>
-                  <span className="about-timeline-clip-label">{tool}</span>
+                  <span className="about-timeline-clip-cut" />
                 </span>
               </div>
             </div>
@@ -261,46 +259,7 @@ export function About() {
   const sectionRef = useRef<HTMLElement>(null);
   const filmMotion = useRef({ value: 0 });
   const timecodeRef = useRef<HTMLSpanElement>(null);
-  const [tapeEnabled, setTapeEnabled] = useState(false);
-  const [tapeVisible, setTapeVisible] = useState(false);
   const roles = about.about.roles;
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const stage = section.querySelector<HTMLElement>("[data-about-stage]");
-    const media = window.matchMedia(
-      "(min-width: 900px) and (prefers-reduced-motion: no-preference)",
-    );
-    let observer: IntersectionObserver | null = null;
-
-    const sync = () => {
-      const enabled = media.matches;
-
-      setTapeEnabled(enabled);
-      observer?.disconnect();
-      observer = null;
-
-      if (enabled && stage) {
-        observer = new IntersectionObserver(
-          ([entry]) => setTapeVisible(entry.isIntersecting),
-          { rootMargin: "240px 0px" },
-        );
-        observer.observe(stage);
-      } else {
-        setTapeVisible(false);
-      }
-    };
-
-    sync();
-    media.addEventListener("change", sync);
-
-    return () => {
-      media.removeEventListener("change", sync);
-      observer?.disconnect();
-    };
-  }, []);
 
   useGSAP(
     () => {
@@ -335,6 +294,8 @@ export function About() {
           const timelineClips = gsap.utils.toArray<HTMLElement>("[data-timeline-clip]", stage);
           const playhead = stage.querySelector<HTMLElement>("[data-timeline-playhead]");
           const filmProgress = stage.querySelector<HTMLElement>("[data-film-progress]");
+          const filmStrip = stage.querySelector<HTMLElement>("[data-film-strip]");
+          const filmStill = stage.querySelector<HTMLElement>("[data-film-still]");
           const lane = stage.querySelector<HTMLElement>(".about-timeline-lane");
 
           if (
@@ -378,6 +339,12 @@ export function About() {
           gsap.set(playhead, { autoAlpha: 0, x: 0 });
           if (filmProgress) {
             gsap.set(filmProgress, { scaleX: 0, transformOrigin: "left center" });
+          }
+          if (filmStrip) {
+            gsap.set(filmStrip, { xPercent: 0 });
+          }
+          if (filmStill) {
+            gsap.set(filmStill, { scale: 1.08, xPercent: 1.5 });
           }
 
           const timeline = gsap.timeline({
@@ -461,6 +428,11 @@ export function About() {
             .to(scenes[1], { autoAlpha: 0, yPercent: -4, duration: 0.35 }, 1.9)
             .to(scenes[2], { autoAlpha: 1, yPercent: 0, duration: 0.35 }, 2.0)
             .to(
+              filmStill,
+              { scale: 1, xPercent: 0, duration: 0.8, ease: "power2.out" },
+              2.02,
+            )
+            .to(
               timelineClips,
               { scaleX: 1, duration: 0.3, stagger: 0.08 },
               2.12,
@@ -477,6 +449,13 @@ export function About() {
             timeline.to(
               filmProgress,
               { scaleX: 1, duration: 0.85, ease: "none" },
+              2.12,
+            );
+          }
+          if (filmStrip) {
+            timeline.to(
+              filmStrip,
+              { xPercent: -20, duration: 0.85, ease: "none" },
               2.12,
             );
           }
@@ -512,7 +491,7 @@ export function About() {
     },
     {
       scope: sectionRef,
-      dependencies: [roles.length, tapeEnabled],
+      dependencies: [roles.length],
       revertOnUpdate: true,
     },
   );
@@ -576,8 +555,6 @@ export function About() {
                 {role.id === "video-editor" ? (
                   <VideoArtifact
                     role={role}
-                    tapeEnabled={tapeEnabled}
-                    tapeVisible={tapeVisible}
                     motion={filmMotion}
                     timecodeRef={timecodeRef}
                   />
